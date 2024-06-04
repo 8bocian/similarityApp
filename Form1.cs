@@ -3,6 +3,7 @@ using System;
 using Accord;
 using Accord.MachineLearning;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace similarityApp
 {
@@ -14,13 +15,40 @@ namespace similarityApp
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Button Clicked!");
-            vectorize(["", ""]);
+            string[] documents = {
+                @"This is the first document.",
+                @"This document is the second document.",
+                @"And this is the third one.",
+                @"Is this the first document?"
+            };
         }
 
-        private void vectorize(string[] texts)
+        private void create_list(string[] client_products)
         {
-            // Example array of strings
+            double[][] vecotrs_xd = vectorize(client_products);
+            double[][] vectors_3d = reduce_dimensionality(vectors);
+
+            Queue top_10 = new Queue(10);
+
+            foreach (var client_product in client_products){
+                foreach (var central_product in central_products){
+                    calculate_distance(client_product, central_product);
+                    
+                }
+            }
+        }
+
+        private double calculate_distance(double[] p1, double[] p2)
+        {
+            double deltaX = p1[0] - p2[0];
+            double deltaY = p1[1] - p2[1];
+            double deltaZ = p1[2] - p2[2];
+            
+            return Math.Sqrt(deltaX^2 + deltaY^2 + deltaZ^2);
+        }
+
+        private double[][] vectorize(string[] texts)
+        {
             string[] documents = {
                 @"This is the first document.",
                 @"This document is the second document.",
@@ -35,36 +63,28 @@ namespace similarityApp
                     Idf = Accord.MachineLearning.InverseDocumentFrequency.Default
             };
 
-            // Learn the TF-IDF from the given documents
             vectorizer.Learn(words);
 
-            // Transform the documents into their TF-IDF representation
             double[][] transformed = vectorizer.Transform(words);
 
-            // Display the transformed vectors
-            for (int i = 0; i < transformed.Length; i++)
-            {
-                Console.WriteLine($"Document {i + 1}:");
-                Console.WriteLine(string.Join(", ", transformed[i]));
-                Console.WriteLine();
-            }
+            return transformed;
         }
 
-        // private void reduce_dimensionality(double[][] vectors)
-        // {
-        //     var tsne = new TSNE<Distance.SquareEuclidean>()
-        // {
-        //     NumberOfOutputs = 3 // Target dimensionality
-        // };
+        private double[][] reduce_dimensionality(double[][] vectors)
+        {
+            var tsne = new Accord.MachineLearning.Clustering.TSNE()
+        {
+            NumberOfOutputs = 3,
+            Perplexity = 0.99
+        };
 
-        // // Compute the reduction
-        // double[][] result = tsne.Transform(data);
+        double[][] result = tsne.Transform(vectors);
 
-        // // Print the results
-        // foreach (var point in result)
-        // {
-        //     Console.WriteLine($"({point[0]}, {point[1]}, {point[2]})");
-        // }
-        // }
+        foreach (var point in result)
+        {
+            MessageBox.Show($"({point[0]}, {point[1]}, {point[2]})");
+        }
+        return result;
+        }
     }
 }
