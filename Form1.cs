@@ -15,12 +15,6 @@ namespace similarityApp
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            string[] documents = {
-                @"This is the first document.",
-                @"This document is the second document.",
-                @"And this is the third one.",
-                @"Is this the first document?"
-            };
         }
 
         private void create_list(string[] client_products)
@@ -49,13 +43,6 @@ namespace similarityApp
 
         private double[][] vectorize(string[] texts)
         {
-            string[] documents = {
-                @"This is the first document.",
-                @"This document is the second document.",
-                @"And this is the third one.",
-                @"Is this the first document?"
-            };
-
             string[][] words = Accord.MachineLearning.Tools.Tokenize(documents);
             var vectorizer = new Accord.MachineLearning.TFIDF()
             {
