@@ -43,7 +43,7 @@ namespace similarityApp
 
         private double[][] vectorize(string[] texts)
         {
-            string[][] words = Accord.MachineLearning.Tools.Tokenize(documents);
+            string[][] words = Accord.MachineLearning.Tools.Tokenize(texts);
             var vectorizer = new Accord.MachineLearning.TFIDF()
             {
                     Tf = Accord.MachineLearning.TermFrequency.Log,
