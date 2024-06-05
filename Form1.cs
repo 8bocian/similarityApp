@@ -19,15 +19,12 @@ namespace similarityApp
 
         private void create_list(string[] client_products)
         {
-            double[][] vecotrs_xd = vectorize(client_products);
-            double[][] vectors_3d = reduce_dimensionality(vectors);
+            double[][] client_vectors_xd = vectorize(client_products);
+            double[][] client_vectors_3d = reduce_dimensionality(client_vectors_xd);
 
-            Queue top_10 = new Queue(10);
-
-            foreach (var client_product in client_products){
-                foreach (var central_product in central_products){
-                    calculate_distance(client_product, central_product);
-                    
+            for (int i = 0; i < client_vectors_3d.Count; i++){
+                for (int j = 0; j < central_vectors_3d.Count; j++){
+                    calculate_distance(client_vectors_3d[i], central_vectors_3d[j]);
                 }
             }
         }
